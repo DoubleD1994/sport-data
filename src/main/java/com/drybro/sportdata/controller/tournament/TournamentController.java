@@ -32,8 +32,6 @@ public interface TournamentController {
 
 	String TOURNAMENT_TEAM_IS_ELIMINATED_PATH = "/{tournamentId}/eliminated";
 
-
-
 	@GetMapping()
 	List<Tournament> getTournaments();
 
@@ -61,21 +59,18 @@ public interface TournamentController {
 			@RequestBody final List<Long> teamIds );
 
 	@GetMapping(TOURNAMENT_STANDINGS_PATH)
-	List<TournamentTeam> getTournamentStandings(
-			@PathVariable final Long tournamentId );
+	List<TournamentTeam> getTournamentStandings( @PathVariable final Long tournamentId );
 
 	@GetMapping(TOURNAMENT_TEAM_IS_ELIMINATED_PATH)
 	Tournament getTournamentTeamsByStatus( @PathVariable final Long tournamentId,
 			@RequestParam final Boolean isEliminated );
 
 	@GetMapping(TOURNAMENT_TEAM_BY_ROUND_PATH)
-	List<TournamentTeam> getTournamentTeamByRound(
-			@PathVariable final Long tournamentId,
+	List<TournamentTeam> getTournamentTeamByRound( @PathVariable final Long tournamentId,
 			@RequestParam final Round round );
 
 	@GetMapping(TOURNAMENT_TEAM_BY_GROUP_PATH)
-	List<TournamentTeam> getTournamentTeamByGroup(
-			@PathVariable("tournamentId") final Long tournamentId,
-			@RequestParam("group") final String group );
+	List<TournamentTeam> getTournamentTeamByGroup( @PathVariable final Long tournamentId,
+			@RequestParam final String group );
 
 }
