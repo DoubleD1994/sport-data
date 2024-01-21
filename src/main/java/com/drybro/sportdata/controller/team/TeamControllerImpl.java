@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -43,7 +44,11 @@ public class TeamControllerImpl implements TeamController {
 
 	@Override
 	@PostMapping()
-	public void createTeam( final Team team ) {
+	@ResponseStatus(HttpStatus.CREATED)
+	public void createTeam( @RequestBody final Team team ) {
+		if(team == null) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Team cannot be null");
+		}
 		teamRepository.save( team );
 		log.info( "TEAM CREATED: {}", team );
 	}
@@ -56,6 +61,7 @@ public class TeamControllerImpl implements TeamController {
 
 	@Override
 	@PutMapping(TEAM_ID_PATH)
+	@ResponseStatus(HttpStatus.ACCEPTED)
 	public void updateTeam( @PathVariable("teamId") final Long teamId,
 			@RequestBody final Team updatedTeam ) {
 		final Team team = findTeamById( teamId );
@@ -71,6 +77,7 @@ public class TeamControllerImpl implements TeamController {
 
 	@Override
 	@DeleteMapping(TEAM_ID_PATH)
+	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void deleteTeam( @PathVariable("teamId") final Long teamId ) {
 		teamRepository.deleteById( teamId );
 		log.info( "TEAM WITH ID {} DELETED", teamId );
