@@ -2,19 +2,24 @@ package com.drybro.sportdata.controller.team;
 
 import static com.drybro.sportdata.controller.team.TeamController.TEAM_PATH;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.drybro.sportdata.model.Team;
+import com.drybro.sportdata.repository.TeamRepository;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,33 +31,57 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class TeamControllerImpl implements TeamController {
 
+	private final TeamRepository teamRepository;
+
 	@Override
 	@GetMapping()
 	public List<Team> getTeams() {
-		return null;
+		final List<Team> teams = new ArrayList<>();
+		teamRepository.findAll().forEach( teams::add );
+		return teams;
 	}
 
 	@Override
 	@PostMapping()
 	public void createTeam( final Team team ) {
-
+		teamRepository.save( team );
+		log.info( "TEAM CREATED: {}", team );
 	}
 
 	@Override
 	@GetMapping(TEAM_ID_PATH)
-	public Team getTeam( @RequestParam("teamId") final Long teamId ) {
-		return null;
+	public Team getTeamById( @PathVariable("teamId") final Long teamId ) {
+		return findTeamById( teamId );
 	}
 
 	@Override
 	@PutMapping(TEAM_ID_PATH)
-	public void updateTeam( @RequestParam("teamId") final Long teamId, @RequestBody final Team team ) {
-
+	public void updateTeam( @PathVariable("teamId") final Long teamId,
+			@RequestBody final Team updatedTeam ) {
+		final Team team = findTeamById( teamId );
+		if ( !updatedTeam.getTeamName().isBlank() ) {
+			team.setTeamName( updatedTeam.getTeamName() );
+		}
+		if ( updatedTeam.getLogoPath() != null && !updatedTeam.getLogoPath().isBlank() ) {
+			team.setLogoPath( updatedTeam.getLogoPath() );
+		}
+		teamRepository.save( team );
+		log.info( "TEAM WITH ID {} UPDATED", teamId );
 	}
 
 	@Override
 	@DeleteMapping(TEAM_ID_PATH)
-	public void deleteTeam( @RequestParam("teamId") final Long teamId ) {
+	public void deleteTeam( @PathVariable("teamId") final Long teamId ) {
+		teamRepository.deleteById( teamId );
+		log.info( "TEAM WITH ID {} DELETED", teamId );
+	}
 
+	private Team findTeamById( final Long teamId ) {
+		try {
+			return teamRepository.findById( teamId ).orElseThrow();
+		} catch ( final NoSuchElementException nsee ) {
+			throw new ResponseStatusException( HttpStatus.NOT_FOUND,
+					"Team with ID " + teamId + "  not found", nsee );
+		}
 	}
 }

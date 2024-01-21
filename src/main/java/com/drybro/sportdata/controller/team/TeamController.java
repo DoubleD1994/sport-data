@@ -24,7 +24,7 @@ public interface TeamController {
 	void createTeam(final Team team);
 
 	@GetMapping(TEAM_ID_PATH)
-	Team getTeam(@PathVariable final Long teamId);
+	Team getTeamById(@PathVariable final Long teamId);
 
 	@PutMapping(TEAM_ID_PATH)
 	void updateTeam(@PathVariable final Long teamId, @RequestBody final Team team);
