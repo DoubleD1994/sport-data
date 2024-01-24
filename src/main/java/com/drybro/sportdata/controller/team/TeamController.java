@@ -21,7 +21,7 @@ public interface TeamController {
 	List<Team> getTeams();
 
 	@PostMapping()
-	void createTeam(final Team team);
+	void createTeam(@RequestBody final Team team);
 
 	@GetMapping(TEAM_ID_PATH)
 	Team getTeamById(@PathVariable final Long teamId);

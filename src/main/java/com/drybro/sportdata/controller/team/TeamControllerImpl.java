@@ -46,9 +46,6 @@ public class TeamControllerImpl implements TeamController {
 	@PostMapping()
 	@ResponseStatus(HttpStatus.CREATED)
 	public void createTeam( @RequestBody final Team team ) {
-		if(team == null) {
-			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Team cannot be null");
-		}
 		teamRepository.save( team );
 		log.info( "TEAM CREATED: {}", team );
 	}
