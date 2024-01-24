@@ -1,5 +1,7 @@
 package com.drybro.sportdata.model;
 
+import com.drybro.sportdata.model.constants.Sport;
+
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.Column;
@@ -27,6 +29,10 @@ public class Team {
 	@Nonnull
 	@Column(name = "team_name")
 	private String teamName;
+
+	@Nonnull
+	@Column(name = "sport")
+	private Sport sport;
 
 	@Nullable
 	@Column(name = "logo_path")

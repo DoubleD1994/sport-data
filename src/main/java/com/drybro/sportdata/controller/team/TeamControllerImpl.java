@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
 import com.drybro.sportdata.model.Team;
+import com.drybro.sportdata.model.constants.Sport;
 import com.drybro.sportdata.repository.TeamRepository;
 
 import lombok.AllArgsConstructor;
@@ -78,6 +79,11 @@ public class TeamControllerImpl implements TeamController {
 	public void deleteTeam( @PathVariable("teamId") final Long teamId ) {
 		teamRepository.deleteById( teamId );
 		log.info( "TEAM WITH ID {} DELETED", teamId );
+	}
+
+	@Override
+	public List<Team> getTeamsBySport( final Sport sport ) {
+		return teamRepository.findTeamsBySport( sport );
 	}
 
 	private Team findTeamById( final Long teamId ) {

@@ -8,14 +8,18 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.drybro.sportdata.model.Team;
+import com.drybro.sportdata.model.constants.Sport;
 
 public interface TeamController {
 
 	String TEAM_PATH = "/team";
 
 	String TEAM_ID_PATH = "/{teamId}";
+
+	String TEAMS_BY_SPORT = "/sport";
 
 	@GetMapping()
 	List<Team> getTeams();
@@ -31,5 +35,8 @@ public interface TeamController {
 
 	@DeleteMapping(TEAM_ID_PATH)
 	void deleteTeam(@PathVariable final Long teamId);
+
+	@GetMapping(TEAMS_BY_SPORT)
+	List<Team> getTeamsBySport(@RequestParam final Sport sport );
 
 }
