@@ -9,6 +9,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -26,11 +27,11 @@ public class Team {
 	@Column(name = "id")
 	private Long id;
 
-	@Nonnull
+	@NotNull
 	@Column(name = "team_name")
 	private String teamName;
 
-	@Nonnull
+	@NotNull
 	@Column(name = "sport")
 	private Sport sport;
 
