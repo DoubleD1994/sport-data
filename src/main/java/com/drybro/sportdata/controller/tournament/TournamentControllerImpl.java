@@ -50,7 +50,7 @@ public class TournamentControllerImpl implements TournamentController{
 	}
 
 	@Override
-	@GetMapping()
+	@GetMapping(TOURNAMENT_SPORT_PATH)
 	public Tournament getTournamentBySport( @RequestParam final Sport sport ) {
 		return null;
 	}

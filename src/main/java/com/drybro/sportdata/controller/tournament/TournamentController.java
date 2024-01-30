@@ -32,6 +32,8 @@ public interface TournamentController {
 
 	String TOURNAMENT_TEAM_IS_ELIMINATED_PATH = "/{tournamentId}/eliminated";
 
+	String TOURNAMENT_SPORT_PATH = "/sport";
+
 	@GetMapping()
 	List<Tournament> getTournaments();
 
@@ -41,7 +43,7 @@ public interface TournamentController {
 	@GetMapping(TOURNAMENT_ID_PATH)
 	Tournament getTournamentById( @PathVariable final Long tournamentId );
 
-	@GetMapping()
+	@GetMapping(TOURNAMENT_SPORT_PATH)
 	Tournament getTournamentBySport( @RequestParam final Sport sport );
 
 	@PutMapping(TOURNAMENT_ID_PATH)

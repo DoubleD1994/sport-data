@@ -20,6 +20,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import com.drybro.sportdata.controller.team.TeamController;
 import com.drybro.sportdata.model.Team;
+import com.drybro.sportdata.model.constants.Sport;
 import com.drybro.sportdata.repository.TeamRepository;
 
 @SpringBootTest
@@ -39,9 +40,9 @@ public class TeamControllerImplTest {
 
 	@BeforeAll
 	public static void beforeAll() {
-		teamOne = new Team( 1L, "teamOne", "path" );
-		teamTwo = new Team( 2L, "teamTwo", null );
-		teamThree = new Team( 3L, "teamThree", null );
+		teamOne = new Team( 1L, "teamOne", Sport.FOOTBALL, "path" );
+		teamTwo = new Team( 2L, "teamTwo", Sport.FOOTBALL, null );
+		teamThree = new Team( 3L, "teamThree", Sport.FOOTBALL, null );
 
 		teamList.add( teamOne );
 		teamList.add( teamTwo );
@@ -85,7 +86,7 @@ public class TeamControllerImplTest {
 	@Test
 	public void createTeam_NullTeamNameThrowsException() {
 		assertThrows( NullPointerException.class,
-				() -> teamController.createTeam( new Team( 4L, null, null ) ) );
+				() -> teamController.createTeam( new Team( 4L, null, null, null ) ) );
 	}
 
 	@Test
@@ -122,15 +123,17 @@ public class TeamControllerImplTest {
 	}
 
 	@Test
-	void updateUser_UserNotFoundThrowsResponseStatusException() {
+	void updateTeam_TeamNotFoundThrowsResponseStatusException() {
 		assertThrows( ResponseStatusException.class,
 				() -> teamController.updateTeam( 5l, new Team() ) );
 	}
 
 	@Test
-	void deleteUser_HappyPath() {
+	void deleteTeam_HappyPath() {
 		teamController.deleteTeam( teamOne.getId() );
 		verify( teamRepository, times( 1 ) ).deleteById( teamOne.getId() );
 	}
+
+	// TODO: Get team by sport tests
 
 }
