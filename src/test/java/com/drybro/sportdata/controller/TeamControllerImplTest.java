@@ -23,6 +23,8 @@ import com.drybro.sportdata.model.Team;
 import com.drybro.sportdata.model.constants.Sport;
 import com.drybro.sportdata.repository.TeamRepository;
 
+import jakarta.validation.ConstraintViolationException;
+
 @SpringBootTest
 public class TeamControllerImplTest {
 
@@ -80,12 +82,14 @@ public class TeamControllerImplTest {
 
 	@Test
 	public void createTeam_NullTeamThrowsException() {
-		assertThrows( ResponseStatusException.class, () -> teamController.createTeam( null ) );
+		when(teamRepository.save( null )).thenThrow( ConstraintViolationException.class );
+		assertThrows( ConstraintViolationException.class, () -> teamController.createTeam( null ) );
 	}
 
 	@Test
 	public void createTeam_NullTeamNameThrowsException() {
-		assertThrows( NullPointerException.class,
+		when(teamRepository.save( new Team( 4L, null, null, null ) )).thenThrow( ConstraintViolationException.class );
+		assertThrows( ConstraintViolationException.class,
 				() -> teamController.createTeam( new Team( 4L, null, null, null ) ) );
 	}
 

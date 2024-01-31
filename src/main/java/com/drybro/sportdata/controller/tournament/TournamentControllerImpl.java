@@ -15,10 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.drybro.sportdata.model.Team;
 import com.drybro.sportdata.model.Tournament;
-import com.drybro.sportdata.model.TournamentTeam;
-import com.drybro.sportdata.model.constants.Round;
 import com.drybro.sportdata.model.constants.Sport;
 
 import lombok.AllArgsConstructor;
@@ -68,43 +65,4 @@ public class TournamentControllerImpl implements TournamentController{
 
 	}
 
-	@Override
-	@GetMapping(TOURNAMENT_TEAMS_PATH)
-	public List<Team> getTournamentTeams( @PathVariable final Long tournamentId ) {
-		return null;
-	}
-
-	@Override
-	@PostMapping(TOURNAMENT_TEAMS_PATH)
-	public void addTeamsToTournament( @PathVariable final Long tournamentId,
-			@RequestBody final List<Long> teamIds ) {
-
-	}
-
-	@Override
-	@GetMapping(TOURNAMENT_STANDINGS_PATH)
-	public List<TournamentTeam> getTournamentStandings( @PathVariable final Long tournamentId ) {
-		return null;
-	}
-
-	@Override
-	@GetMapping(TOURNAMENT_TEAM_IS_ELIMINATED_PATH)
-	public Tournament getTournamentTeamsByStatus( @PathVariable final Long tournamentId,
-			@RequestParam final Boolean isEliminated  ) {
-		return null;
-	}
-
-	@Override
-	@GetMapping(TOURNAMENT_TEAM_BY_ROUND_PATH)
-	public List<TournamentTeam> getTournamentTeamByRound( @PathVariable final Long tournamentId,
-			@RequestParam final Round round ) {
-		return null;
-	}
-
-	@Override
-	@GetMapping(TOURNAMENT_TEAM_BY_GROUP_PATH)
-	public List<TournamentTeam> getTournamentTeamByGroup( @PathVariable final Long tournamentId,
-			@RequestParam final String group ) {
-		return null;
-	}
 }
