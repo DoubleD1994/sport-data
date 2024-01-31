@@ -9,6 +9,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -29,10 +30,12 @@ public class TournamentTeam {
 	private Long id;
 
 	@OneToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name="team_id", referencedColumnName = "id")
 	@NotNull
 	private Team team;
 
 	@OneToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name="tournament_id", referencedColumnName = "id")
 	@NotNull
 	private Tournament tournament;
 
@@ -41,8 +44,8 @@ public class TournamentTeam {
 	private Round round;
 
 	@Nullable
-	@Column(name = "group")
-	private String group;
+	@Column(name = "tournament_group")
+	private String tournamentGroup;
 
 	@Nullable
 	@Column(name = "group_games_played")
