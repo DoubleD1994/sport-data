@@ -20,6 +20,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import com.drybro.sportdata.controller.team.TeamController;
 import com.drybro.sportdata.model.Team;
+import com.drybro.sportdata.model.Tournament;
 import com.drybro.sportdata.model.constants.Sport;
 import com.drybro.sportdata.repository.TeamRepository;
 
@@ -44,7 +45,7 @@ public class TeamControllerImplTest {
 	public static void beforeAll() {
 		teamOne = new Team( 1L, "teamOne", Sport.FOOTBALL, "path" );
 		teamTwo = new Team( 2L, "teamTwo", Sport.FOOTBALL, null );
-		teamThree = new Team( 3L, "teamThree", Sport.FOOTBALL, null );
+		teamThree = new Team( 3L, "teamThree", Sport.AMERICAN_FOOTBALL, null );
 
 		teamList.add( teamOne );
 		teamList.add( teamTwo );
@@ -82,47 +83,45 @@ public class TeamControllerImplTest {
 
 	@Test
 	public void createTeam_NullTeamThrowsException() {
-		when(teamRepository.save( null )).thenThrow( ConstraintViolationException.class );
+		when( teamRepository.save( null ) ).thenThrow( ConstraintViolationException.class );
 		assertThrows( ConstraintViolationException.class, () -> teamController.createTeam( null ) );
 	}
 
 	@Test
 	public void createTeam_NullTeamNameThrowsException() {
-		when(teamRepository.save( new Team( 4L, null, null, null ) )).thenThrow( ConstraintViolationException.class );
+		when( teamRepository.save( new Team( 4L, null, null, null ) ) ).thenThrow(
+				ConstraintViolationException.class );
 		assertThrows( ConstraintViolationException.class,
 				() -> teamController.createTeam( new Team( 4L, null, null, null ) ) );
 	}
 
 	@Test
 	public void getTeamById_HappyPath() {
-		when(teamRepository.findById( 1L )).thenReturn( Optional.of( teamOne ) );
+		when( teamRepository.findById( 1L ) ).thenReturn( Optional.of( teamOne ) );
 		final Team returnedTeam = teamController.getTeamById( 1L );
 		assertThat( returnedTeam.getTeamName() ).isEqualTo( teamOne.getTeamName() );
 	}
 
 	@Test
 	void getTeamById_TeamNotFoundThrowsResponseStatusException() {
-		assertThrows( ResponseStatusException.class,
-				() -> teamController.getTeamById( 5l ) );
+		assertThrows( ResponseStatusException.class, () -> teamController.getTeamById( 5l ) );
 	}
 
 	@Test
 	void getTeamById_NullValueThrowsResponseStatusException() {
-		assertThrows( ResponseStatusException.class,
-				() -> teamController.getTeamById( null ) );
+		assertThrows( ResponseStatusException.class, () -> teamController.getTeamById( null ) );
 	}
 
 	@Test
 	void updateTeam_HappyPath() {
-		when( teamRepository.findById( 1L ) ).thenReturn(
-				Optional.of( teamOne ) );
+		when( teamRepository.findById( 1L ) ).thenReturn( Optional.of( teamOne ) );
 
 		final Team updateTeam = teamOne;
 		updateTeam.setTeamName( "Updated" );
 
-		teamController.updateTeam(1L, updateTeam);
+		teamController.updateTeam( 1L, updateTeam );
 
-		verify( teamRepository, times(1) ).findById( 1L );
+		verify( teamRepository, times( 1 ) ).findById( 1L );
 		verify( teamRepository, times( 1 ) ).save( updateTeam );
 	}
 
@@ -138,6 +137,21 @@ public class TeamControllerImplTest {
 		verify( teamRepository, times( 1 ) ).deleteById( teamOne.getId() );
 	}
 
-	// TODO: Get team by sport tests
+	@Test
+	void getTeamsBySport_HappyPath() {
+		List<Team> footballTeams = new ArrayList<>();
+		footballTeams.add( teamOne );
+		footballTeams.add( teamTwo );
+		when( teamRepository.findTeamsBySport( Sport.FOOTBALL ) ).thenReturn( footballTeams );
 
+		List<Team> teams = teamController.getTeamsBySport( Sport.FOOTBALL );
+		assertThat( teams.size() ).isEqualTo( 2 );
+	}
+
+	@Test
+	void getTeamBySport_NullValueThrowsResponseStatusException() {
+		when( teamRepository.findTeamsBySport( null ) ).thenReturn( new ArrayList<>() );
+		final List<Team> teams = teamController.getTeamsBySport( null );
+		assertThat( teams.size() ).isEqualTo( 0 );
+	}
 }

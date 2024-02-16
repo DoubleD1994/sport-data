@@ -86,13 +86,15 @@ public class TournamentControllerImplTest {
 	@Test
 	public void createTournament_NullTournamentNameThrowsException() {
 		tournamentOne.setName( null );
-		when( tournamentRepository.save( tournamentOne ) ).thenThrow( ConstraintViolationException.class );
-		assertThrows( ConstraintViolationException.class, () -> tournamentController.createTournament( tournamentOne ) );
+		when( tournamentRepository.save( tournamentOne ) ).thenThrow(
+				ConstraintViolationException.class );
+		assertThrows( ConstraintViolationException.class,
+				() -> tournamentController.createTournament( tournamentOne ) );
 	}
 
 	@Test
 	public void getTournamentById_HappyPath() {
-		when(tournamentRepository.findById( 1L )).thenReturn( Optional.of( tournamentOne ) );
+		when( tournamentRepository.findById( 1L ) ).thenReturn( Optional.of( tournamentOne ) );
 		final Tournament returnedTournament = tournamentController.getTournamentById( 1L );
 		assertThat( returnedTournament.getName() ).isEqualTo( tournamentOne.getName() );
 	}
@@ -114,7 +116,8 @@ public class TournamentControllerImplTest {
 		List<Tournament> footballTournaments = new ArrayList<>();
 		footballTournaments.add( tournamentOne );
 		footballTournaments.add( tournamentTwo );
-		when( tournamentRepository.findTournamentsBySport( Sport.FOOTBALL ) ).thenReturn( footballTournaments );
+		when( tournamentRepository.findTournamentsBySport( Sport.FOOTBALL ) ).thenReturn(
+				footballTournaments );
 
 		List<Tournament> tournaments = tournamentController.getTournamentsBySport( Sport.FOOTBALL );
 		assertThat( tournaments.size() ).isEqualTo( 2 );
@@ -122,22 +125,21 @@ public class TournamentControllerImplTest {
 
 	@Test
 	void getTournamentBySport_NullValueThrowsResponseStatusException() {
-		when( tournamentRepository.findTournamentsBySport(null)).thenReturn( new ArrayList<>() );
+		when( tournamentRepository.findTournamentsBySport( null ) ).thenReturn( new ArrayList<>() );
 		final List<Tournament> tournaments = tournamentController.getTournamentsBySport( null );
 		assertThat( tournaments.size() ).isEqualTo( 0 );
 	}
 
 	@Test
 	void updateTournament_HappyPath() {
-		when( tournamentRepository.findById( 1L ) ).thenReturn(
-				Optional.of( tournamentOne ) );
+		when( tournamentRepository.findById( 1L ) ).thenReturn( Optional.of( tournamentOne ) );
 
 		final Tournament updateTournament = tournamentOne;
 		updateTournament.setName( "Updated" );
 
-		tournamentController.updateTournament(1L, updateTournament);
+		tournamentController.updateTournament( 1L, updateTournament );
 
-		verify( tournamentRepository, times(1) ).findById( 1L );
+		verify( tournamentRepository, times( 1 ) ).findById( 1L );
 		verify( tournamentRepository, times( 1 ) ).save( updateTournament );
 	}
 
