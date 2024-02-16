@@ -12,14 +12,14 @@ import com.drybro.sportdata.model.constants.Round;
 @Repository
 public interface TournamentTeamRepository extends CrudRepository<TournamentTeam, Long> {
 
-	List<TournamentTeam> findTournamentTeamByTournament( Tournament tournament);
+	List<TournamentTeam> findTournamentTeamsByTournament( Tournament tournament);
 
-	List<TournamentTeam> findTournamentTeamByTournamentOrderByGroupPointsDescGroupScoreDifferenceDescGroupScoreDifferenceDesc(Tournament tournament);
+	List<TournamentTeam> findTournamentTeamsByTournamentOrderByGroupPointsDescGroupScoreDifferenceDescGroupScoreDifferenceDesc(Tournament tournament);
 
-	List<TournamentTeam> findTournamentTeamByTournamentAndEliminated(Tournament tournament, Boolean eliminated);
+	List<TournamentTeam> findTournamentTeamsByTournamentAndEliminated(Tournament tournament, Boolean eliminated);
 
-	List<TournamentTeam> findTournamentTeamByTournamentAndRound(Tournament tournament, Round round);
+	List<TournamentTeam> findTournamentTeamsByTournamentAndRound(Tournament tournament, Round round);
 
-	List<TournamentTeam> findTournamentTeamByTournamentAndAndTournamentGroupOrderByGroupPointsDescGroupScoreDifferenceDescGroupScoreDifferenceDesc(Tournament tournament, String group);
+	List<TournamentTeam> findTournamentTeamsByTournamentAndTournamentGroupOrderByGroupPointsDescGroupScoreDifferenceDescGroupScoreDifferenceDesc(Tournament tournament, String group);
 
 }

@@ -23,7 +23,6 @@ import lombok.RequiredArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@RequiredArgsConstructor
 public class TournamentTeam {
 
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -102,4 +101,5 @@ public class TournamentTeam {
 		this.groupPoints = groupPoints;
 		this.eliminated = eliminated;
 	}
+
 }

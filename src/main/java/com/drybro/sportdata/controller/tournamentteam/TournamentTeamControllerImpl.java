@@ -44,7 +44,7 @@ public class TournamentTeamControllerImpl implements TournamentTeamController {
 	public List<Team> getTournamentTeams( @RequestParam final Long tournamentId ) {
 		final Tournament tournament = tournamentService.findTournamentById( tournamentId );
 		final List<Team> tournamentTeamList = new ArrayList<>();
-		tournamentTeamRepository.findTournamentTeamByTournament( tournament )
+		tournamentTeamRepository.findTournamentTeamsByTournament( tournament )
 				.forEach( tournamentTeam -> tournamentTeamList.add( tournamentTeam.getTeam() ) );
 		return tournamentTeamList;
 	}
@@ -60,7 +60,7 @@ public class TournamentTeamControllerImpl implements TournamentTeamController {
 	@GetMapping(TOURNAMENT_TEAM_STANDING)
 	public List<TournamentTeam> getTournamentStandings( @PathVariable final Long tournamentId ) {
 		final Tournament tournament = tournamentService.findTournamentById( tournamentId );
-		return tournamentTeamRepository.findTournamentTeamByTournamentOrderByGroupPointsDescGroupScoreDifferenceDescGroupScoreDifferenceDesc(
+		return tournamentTeamRepository.findTournamentTeamsByTournamentOrderByGroupPointsDescGroupScoreDifferenceDescGroupScoreDifferenceDesc(
 				tournament );
 	}
 
@@ -69,7 +69,7 @@ public class TournamentTeamControllerImpl implements TournamentTeamController {
 	public List<TournamentTeam> getTournamentTeamsByStatus( @PathVariable final Long tournamentId,
 			@RequestParam final Boolean isEliminated ) {
 		final Tournament tournament = tournamentService.findTournamentById( tournamentId );
-		return tournamentTeamRepository.findTournamentTeamByTournamentAndEliminated( tournament, isEliminated );
+		return tournamentTeamRepository.findTournamentTeamsByTournamentAndEliminated( tournament, isEliminated );
 	}
 
 	@Override
@@ -77,7 +77,7 @@ public class TournamentTeamControllerImpl implements TournamentTeamController {
 	public List<TournamentTeam> getTournamentTeamsByRound( @PathVariable final Long tournamentId,
 			@RequestParam final Round round ) {
 		final Tournament tournament = tournamentService.findTournamentById( tournamentId );
-		return tournamentTeamRepository.findTournamentTeamByTournamentAndRound( tournament, round );
+		return tournamentTeamRepository.findTournamentTeamsByTournamentAndRound( tournament, round );
 	}
 
 	@Override
@@ -93,7 +93,7 @@ public class TournamentTeamControllerImpl implements TournamentTeamController {
 	public List<TournamentTeam> getTournamentTeamsByGroup( @RequestParam final Long tournamentId,
 			@RequestParam final String groupName ) {
 		final Tournament tournament = tournamentService.findTournamentById( tournamentId );
-		return tournamentTeamRepository.findTournamentTeamByTournamentAndAndTournamentGroupOrderByGroupPointsDescGroupScoreDifferenceDescGroupScoreDifferenceDesc(tournament, groupName);
+		return tournamentTeamRepository.findTournamentTeamsByTournamentAndTournamentGroupOrderByGroupPointsDescGroupScoreDifferenceDescGroupScoreDifferenceDesc(tournament, groupName);
 	}
 
 }
