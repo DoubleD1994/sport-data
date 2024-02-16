@@ -66,16 +66,20 @@ public class TournamentTeam {
 	private Integer groupGamesLost;
 
 	@Nullable
-	@Column(name = "group_points_scored")
-	private Integer groupPointsScored;
+	@Column(name = "group_score_for")
+	private Integer groupScoreFor;
 
 	@Nullable
-	@Column(name = "group_points_against")
-	private Integer groupPointsAgainst;
+	@Column(name = "group_score_against")
+	private Integer groupScoreAgainst;
 
 	@Nullable
-	@Column(name = "group_points_difference")
-	private Integer groupPointsDifference;
+	@Column(name = "group_score_difference")
+	private Integer groupScoreDifference;
+
+	@Nullable
+	@Column(name = "group_points")
+	private Integer groupPoints;
 
 	@NotNull
 	@Column(name = "eliminated")
@@ -83,8 +87,8 @@ public class TournamentTeam {
 
 	public TournamentTeam( final Team team, final Tournament tournament, final Round round,
 			@Nullable final Integer groupGamesPlayed, @Nullable final Integer groupGamesWon,
-			@Nullable final Integer groupGamesDraw, @Nullable final Integer groupGamesLost, @Nullable final Integer groupPointsScored,
-			@Nullable final Integer groupPointsAgainst, @Nullable final Integer groupPointsDifference, final Boolean eliminated ) {
+			@Nullable final Integer groupGamesDraw, @Nullable final Integer groupGamesLost, @Nullable final Integer groupScoreFor,
+			@Nullable final Integer groupScoreAgainst, @Nullable final Integer groupScoreDifference, @Nullable final Integer groupPoints, final Boolean eliminated ) {
 		this.team = team;
 		this.tournament = tournament;
 		this.round = round;
@@ -92,9 +96,10 @@ public class TournamentTeam {
 		this.groupGamesWon = groupGamesWon;
 		this.groupGamesDraw = groupGamesDraw;
 		this.groupGamesLost = groupGamesLost;
-		this.groupPointsScored = groupPointsScored;
-		this.groupPointsAgainst = groupPointsAgainst;
-		this.groupPointsDifference = groupPointsDifference;
+		this.groupScoreFor = groupScoreFor;
+		this.groupScoreAgainst = groupScoreAgainst;
+		this.groupScoreDifference = groupScoreDifference;
+		this.groupPoints = groupPoints;
 		this.eliminated = eliminated;
 	}
 }

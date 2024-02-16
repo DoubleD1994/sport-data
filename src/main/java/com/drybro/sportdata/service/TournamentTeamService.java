@@ -35,7 +35,7 @@ public class TournamentTeamService {
 
 		for ( final Team team : teams ) {
 			final TournamentTeam tournamentTeam = new TournamentTeam( team, tournament, round, 0, 0,
-					0, 0, 0, 0, 0, false );
+					0, 0, 0, 0, 0, 0, false );
 			tournamentTeamRepository.save( tournamentTeam );
 		}
 	}
