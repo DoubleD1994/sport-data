@@ -22,8 +22,6 @@ public interface TournamentController {
 
 	String TOURNAMENT_ID_PATH = "/{tournamentId}";
 
-	String TOURNAMENT_STANDINGS_PATH = "/{tournamentId}/standings";
-
 	String TOURNAMENT_SPORT_PATH = "/sport";
 
 	@GetMapping()

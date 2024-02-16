@@ -47,12 +47,12 @@ public class Tournament {
 	private Integer groupSize;
 
 	@NotNull
-	@Column(name = "no_of_rounds")
-	private Integer numberOfRounds;
+	@Column(name = "no_of_knockout_rounds")
+	private Integer numberOfKnockoutRounds;
 
 	@NotNull
-	@Column(name = "no_of_qualifying_teams")
-	private Integer numberOfQualifyingTeams;
+	@Column(name = "no_of_qualifying_teams_from_group")
+	private Integer numberOfQualifyingTeamsFromGroup;
 
 	@NotNull
 	@Column(name = "sport")

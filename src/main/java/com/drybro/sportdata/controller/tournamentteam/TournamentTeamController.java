@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -30,7 +31,7 @@ public interface TournamentTeamController {
 
 	@PostMapping()
 	void addTeamsToTournament( @PathVariable final Long tournamentId,
-			@RequestBody final List<Long> teamIds );
+			@RequestBody final List<Team> teams );
 
 	@GetMapping(TOURNAMENT_TEAM_STANDING)
 	List<TournamentTeam> getTournamentStandings(@PathVariable final Long tournamentId);
@@ -42,6 +43,10 @@ public interface TournamentTeamController {
 	@GetMapping(TOURNAMENT_TEAM_BY_ROUND_PATH)
 	List<TournamentTeam> getTournamentTeamByRound( @PathVariable final Long tournamentId,
 			@RequestParam final Round round );
+
+	@PutMapping(TOURNAMENT_TEAM_BY_GROUP_PATH)
+	List<TournamentTeam> addTournamentTeamToGroup( @PathVariable final Long tournamentId,
+			@RequestParam final Long teamId, @RequestParam final String groupName );
 
 	@GetMapping(TOURNAMENT_TEAM_BY_GROUP_PATH)
 	List<TournamentTeam> getTournamentTeamByGroup( @PathVariable final Long tournamentId,

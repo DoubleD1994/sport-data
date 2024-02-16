@@ -23,6 +23,7 @@ import org.springframework.web.server.ResponseStatusException;
 import com.drybro.sportdata.model.Team;
 import com.drybro.sportdata.model.constants.Sport;
 import com.drybro.sportdata.repository.TeamRepository;
+import com.drybro.sportdata.service.TeamService;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -35,6 +36,8 @@ import lombok.extern.slf4j.Slf4j;
 public class TeamControllerImpl implements TeamController {
 
 	private final TeamRepository teamRepository;
+
+	private final TeamService teamService;
 
 	@Override
 	@GetMapping()
@@ -55,7 +58,7 @@ public class TeamControllerImpl implements TeamController {
 	@Override
 	@GetMapping(TEAM_ID_PATH)
 	public Team getTeamById( @PathVariable("teamId") final Long teamId ) {
-		return findTeamById( teamId );
+		return teamService.findTeamById( teamId );
 	}
 
 	@Override
@@ -63,7 +66,7 @@ public class TeamControllerImpl implements TeamController {
 	@ResponseStatus(HttpStatus.ACCEPTED)
 	public void updateTeam( @PathVariable("teamId") final Long teamId,
 			@RequestBody final Team updatedTeam ) {
-		final Team team = findTeamById( teamId );
+		final Team team = teamService.findTeamById( teamId );
 
 		if ( !updatedTeam.getTeamName().isBlank() ) {
 			team.setTeamName( updatedTeam.getTeamName() );
@@ -91,14 +94,5 @@ public class TeamControllerImpl implements TeamController {
 	@GetMapping(TEAMS_BY_SPORT)
 	public List<Team> getTeamsBySport( @RequestParam final Sport sport ) {
 		return teamRepository.findTeamsBySport( sport );
-	}
-
-	private Team findTeamById( final Long teamId ) {
-		try {
-			return teamRepository.findById( teamId ).orElseThrow();
-		} catch ( final NoSuchElementException nsee ) {
-			throw new ResponseStatusException( HttpStatus.NOT_FOUND,
-					"Team with ID " + teamId + "  not found", nsee );
-		}
 	}
 }

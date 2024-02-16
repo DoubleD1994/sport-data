@@ -4,9 +4,7 @@ import static com.drybro.sportdata.controller.tournament.TournamentController.TO
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.NoSuchElementException;
 
-import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,11 +15,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.server.ResponseStatusException;
 
 import com.drybro.sportdata.model.Tournament;
 import com.drybro.sportdata.model.constants.Sport;
 import com.drybro.sportdata.repository.TournamentRepository;
+import com.drybro.sportdata.service.TournamentService;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -34,6 +32,8 @@ import lombok.extern.slf4j.Slf4j;
 public class TournamentControllerImpl implements TournamentController {
 
 	private final TournamentRepository tournamentRepository;
+
+	private final TournamentService tournamentService;
 
 	@Override
 	@GetMapping
@@ -53,7 +53,7 @@ public class TournamentControllerImpl implements TournamentController {
 	@Override
 	@GetMapping(TOURNAMENT_ID_PATH)
 	public Tournament getTournamentById( @PathVariable final Long tournamentId ) {
-		return findTournamentById( tournamentId );
+		return tournamentService.findTournamentById( tournamentId );
 	}
 
 	@Override
@@ -66,7 +66,7 @@ public class TournamentControllerImpl implements TournamentController {
 	@PutMapping(TOURNAMENT_ID_PATH)
 	public void updateTournament( @PathVariable final Long tournamentId,
 			@RequestBody final Tournament updatedTournament ) {
-		final Tournament tournament = findTournamentById( tournamentId );
+		final Tournament tournament = tournamentService.findTournamentById( tournamentId );
 		updateTournament(tournament, updatedTournament);
 		log.info( "Tournament with ID {} updated", tournamentId );
 	}
@@ -76,15 +76,6 @@ public class TournamentControllerImpl implements TournamentController {
 	public void deleteTournament( @PathVariable final Long tournamentId ) {
 		tournamentRepository.deleteById( tournamentId );
 		log.info( "Tournament with ID {} deleted", tournamentId );
-	}
-
-	private Tournament findTournamentById( final Long tournamentId ) {
-		try {
-			return tournamentRepository.findById( tournamentId ).orElseThrow();
-		} catch ( final NoSuchElementException nsee ) {
-			throw new ResponseStatusException( HttpStatus.NOT_FOUND,
-					"Tournament with ID " + tournamentId + "  not found", nsee );
-		}
 	}
 
 	private void updateTournament( final Tournament tournament,
@@ -104,11 +95,11 @@ public class TournamentControllerImpl implements TournamentController {
 		if ( updatedTournament.getGroupSize().describeConstable().isPresent() ) {
 			tournament.setGroupSize( updatedTournament.getGroupSize() );
 		}
-		if ( updatedTournament.getNumberOfRounds().describeConstable().isPresent() ) {
-			tournament.setNumberOfGroups( updatedTournament.getNumberOfRounds() );
+		if ( updatedTournament.getNumberOfKnockoutRounds().describeConstable().isPresent() ) {
+			tournament.setNumberOfGroups( updatedTournament.getNumberOfKnockoutRounds() );
 		}
-		if ( updatedTournament.getNumberOfQualifyingTeams().describeConstable().isPresent() ) {
-			tournament.setNumberOfQualifyingTeams( updatedTournament.getNumberOfQualifyingTeams() );
+		if ( updatedTournament.getNumberOfQualifyingTeamsFromGroup().describeConstable().isPresent() ) {
+			tournament.setNumberOfQualifyingTeamsFromGroup( updatedTournament.getNumberOfQualifyingTeamsFromGroup() );
 		}
 		if ( updatedTournament.getSport().describeConstable().isPresent() ) {
 			tournament.setSport( updatedTournament.getSport() );
