@@ -21,7 +21,7 @@ public interface TournamentTeamController {
 
 	String TOURNAMENT_TEAM_BY_ROUND_PATH = "/{tournamentId}/round";
 
-	String TOURNAMENT_TEAM_BY_GROUP_PATH = "/{tournamentId}/group";
+	String TOURNAMENT_TEAM_BY_GROUP_PATH = "/group";
 
 	String TOURNAMENT_TEAM_IS_ELIMINATED_PATH = "/{tournamentId}/eliminated";
 
@@ -41,14 +41,13 @@ public interface TournamentTeamController {
 			@RequestParam final Boolean isEliminated );
 
 	@GetMapping(TOURNAMENT_TEAM_BY_ROUND_PATH)
-	List<TournamentTeam> getTournamentTeamByRound( @PathVariable final Long tournamentId,
+	List<TournamentTeam> getTournamentTeamsByRound( @PathVariable final Long tournamentId,
 			@RequestParam final Round round );
 
 	@PutMapping(TOURNAMENT_TEAM_BY_GROUP_PATH)
-	List<TournamentTeam> addTournamentTeamToGroup( @PathVariable final Long tournamentId,
-			@RequestParam final Long teamId, @RequestParam final String groupName );
+	void addTournamentTeamToGroup( @RequestParam final Long tournamentTeamId, @RequestParam final String groupName );
 
 	@GetMapping(TOURNAMENT_TEAM_BY_GROUP_PATH)
-	List<TournamentTeam> getTournamentTeamByGroup( @PathVariable final Long tournamentId,
+	List<TournamentTeam> getTournamentTeamsByGroup( @PathVariable final Long tournamentTeamId,
 			@RequestParam final String group );
 }

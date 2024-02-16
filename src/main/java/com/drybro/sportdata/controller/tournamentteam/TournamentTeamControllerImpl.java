@@ -20,6 +20,7 @@ import com.drybro.sportdata.model.Tournament;
 import com.drybro.sportdata.model.TournamentTeam;
 import com.drybro.sportdata.model.constants.Round;
 import com.drybro.sportdata.repository.TournamentTeamRepository;
+import com.drybro.sportdata.service.TournamentService;
 import com.drybro.sportdata.service.TournamentTeamService;
 
 import lombok.AllArgsConstructor;
@@ -36,11 +37,14 @@ public class TournamentTeamControllerImpl implements TournamentTeamController {
 
 	private final TournamentTeamService tournamentTeamService;
 
+	private final TournamentService tournamentService;
+
 	@Override
 	@GetMapping()
 	public List<Team> getTournamentTeams( @RequestParam final Long tournamentId ) {
+		final Tournament tournament = tournamentService.findTournamentById( tournamentId );
 		final List<Team> tournamentTeamList = new ArrayList<>();
-		tournamentTeamRepository.findTournamentTeamByTournamentId( tournamentId )
+		tournamentTeamRepository.findTournamentTeamByTournament( tournament )
 				.forEach( tournamentTeam -> tournamentTeamList.add( tournamentTeam.getTeam() ) );
 		return tournamentTeamList;
 	}
@@ -55,35 +59,41 @@ public class TournamentTeamControllerImpl implements TournamentTeamController {
 	@Override
 	@GetMapping(TOURNAMENT_TEAM_STANDING)
 	public List<TournamentTeam> getTournamentStandings( @PathVariable final Long tournamentId ) {
-		return null;
+		final Tournament tournament = tournamentService.findTournamentById( tournamentId );
+		return tournamentTeamRepository.findTournamentTeamByTournamentOrderByGroupPointsDescGroupScoreDifferenceDescGroupScoreDifferenceDesc(
+				tournament );
 	}
 
 	@Override
 	@GetMapping(TOURNAMENT_TEAM_IS_ELIMINATED_PATH)
 	public List<TournamentTeam> getTournamentTeamsByStatus( @PathVariable final Long tournamentId,
 			@RequestParam final Boolean isEliminated ) {
-		return null;
+		final Tournament tournament = tournamentService.findTournamentById( tournamentId );
+		return tournamentTeamRepository.findTournamentTeamByTournamentAndEliminated( tournament, isEliminated );
 	}
 
 	@Override
 	@GetMapping(TOURNAMENT_TEAM_BY_ROUND_PATH)
-	public List<TournamentTeam> getTournamentTeamByRound( @PathVariable final Long tournamentId,
+	public List<TournamentTeam> getTournamentTeamsByRound( @PathVariable final Long tournamentId,
 			@RequestParam final Round round ) {
-		return null;
+		final Tournament tournament = tournamentService.findTournamentById( tournamentId );
+		return tournamentTeamRepository.findTournamentTeamByTournamentAndRound( tournament, round );
 	}
 
 	@Override
 	@PutMapping(TOURNAMENT_TEAM_BY_GROUP_PATH)
-	public List<TournamentTeam> addTournamentTeamToGroup( @PathVariable final Long tournamentId,
-			@RequestParam final Long teamId, @RequestParam final String groupName ) {
-		return null;
+	public void addTournamentTeamToGroup( @RequestParam final Long tournamentTeamId, @RequestParam final String groupName ) {
+		final TournamentTeam tournamentTeam = tournamentTeamRepository.findById( tournamentTeamId ).orElseThrow();
+		tournamentTeam.setTournamentGroup( groupName );
+		tournamentTeamRepository.save( tournamentTeam );
 	}
 
 	@Override
 	@GetMapping(TOURNAMENT_TEAM_BY_GROUP_PATH)
-	public List<TournamentTeam> getTournamentTeamByGroup( @PathVariable final Long tournamentId,
-			@RequestParam final String group ) {
-		return null;
+	public List<TournamentTeam> getTournamentTeamsByGroup( @RequestParam final Long tournamentId,
+			@RequestParam final String groupName ) {
+		final Tournament tournament = tournamentService.findTournamentById( tournamentId );
+		return tournamentTeamRepository.findTournamentTeamByTournamentAndAndTournamentGroupOrderByGroupPointsDescGroupScoreDifferenceDescGroupScoreDifferenceDesc(tournament, groupName);
 	}
 
 }
