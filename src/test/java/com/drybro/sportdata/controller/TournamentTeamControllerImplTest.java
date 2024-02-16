@@ -73,14 +73,14 @@ public class TournamentTeamControllerImplTest {
 		tournamentTwo = new Tournament( 2L, "Tournament Two", 2, Format.KNOCKOUT, 0, 0, 1, 0,
 				Sport.FOOTBALL );
 
-		tournamentTeamOne = new TournamentTeam( teamOne, tournamentOne, Round.GROUP, 0, 0, 0, 0,
+		tournamentTeamOne = new TournamentTeam( teamOne, tournamentOne, Round.GROUP, 0, 0, 0, 0, 0,
+				0, 0, 0, false );
+		tournamentTeamTwo = new TournamentTeam( teamTwo, tournamentOne, Round.GROUP, 0, 0, 0, 0, 0,
+				0, 0, 0, false );
+		tournamentTeamThree = new TournamentTeam( teamThree, tournamentTwo, Round.FINAL, 0, 0, 0, 0,
 				0, 0, 0, 0, false );
-		tournamentTeamTwo = new TournamentTeam( teamTwo, tournamentOne, Round.GROUP, 0, 0, 0, 0,
+		tournamentTeamFour = new TournamentTeam( teamFour, tournamentTwo, Round.FINAL, 0, 0, 0, 0,
 				0, 0, 0, 0, false );
-		tournamentTeamThree = new TournamentTeam(  teamThree, tournamentTwo, Round.FINAL, 0, 0,
-				0, 0, 0, 0, 0, 0, false );
-		tournamentTeamFour = new TournamentTeam( teamFour, tournamentTwo, Round.FINAL, 0, 0, 0,
-				0, 0, 0, 0, 0, false );
 
 		tournamentTeamListOne.add( tournamentTeamOne );
 		tournamentTeamListOne.add( tournamentTeamTwo );
@@ -108,7 +108,7 @@ public class TournamentTeamControllerImplTest {
 		tournamentTeamController.addTeamsToTournament( 1L, teamList );
 
 		verify( tournamentTeamRepository, times( 1 ) ).save( tournamentTeamOne );
-		verify( tournamentTeamRepository, times( 1 ) ).save( tournamentTeamTwo );
+		verify( tournamentTeamRepository, times( 0 ) ).save( tournamentTeamThree );
 		verify( tournamentTeamRepository, times( 4 ) ).save( any() );
 	}
 
@@ -121,34 +121,75 @@ public class TournamentTeamControllerImplTest {
 
 		verify( tournamentTeamRepository, times( 1 ) ).save( tournamentTeamThree );
 		verify( tournamentTeamRepository, times( 1 ) ).save( tournamentTeamFour );
+		verify( tournamentTeamRepository, times( 0 ) ).save( tournamentTeamOne );
 		verify( tournamentTeamRepository, times( 4 ) ).save( any() );
 	}
 
 	@Test
-	public void getTournamentStandings_HappyPath(){
+	public void getTournamentStandings_HappyPath() {
+		when( tournamentRepository.findById( 2L ) ).thenReturn(
+				Optional.ofNullable( tournamentTwo ) );
+		when( tournamentTeamRepository.findTournamentTeamsByTournamentOrderByGroupPointsDescGroupScoreDifferenceDescGroupScoreDifferenceDesc(
+				tournamentTwo ) ).thenReturn( tournamentTeamListTwo );
 
+		final List<TournamentTeam> tournamentTeamList = tournamentTeamController.getTournamentStandings(
+				2L );
+
+		assertThat( tournamentTeamList ).contains( tournamentTeamThree );
+		assertThat( tournamentTeamList ).contains( tournamentTeamFour );
 	}
 
 	@Test
-	public void getTournamentTeamsByStatus_HappyPath(){
+	public void getTournamentTeamsByStatus_HappyPath() {
+		when( tournamentRepository.findById( 2L ) ).thenReturn(
+				Optional.ofNullable( tournamentTwo ) );
+		when( tournamentTeamRepository.findTournamentTeamsByTournamentAndEliminated( tournamentTwo,
+				false ) ).thenReturn( tournamentTeamListTwo );
 
+		final List<TournamentTeam> tournamentTeamList = tournamentTeamController.getTournamentTeamsByStatus(
+				2L, false );
+
+		assertThat( tournamentTeamList ).contains( tournamentTeamThree );
+		assertThat( tournamentTeamList ).contains( tournamentTeamFour );
 	}
 
 	@Test
-	public void getTournamentTeamsByRound_HappyPath(){
+	public void getTournamentTeamsByRound_HappyPath() {
+		when( tournamentRepository.findById( 2L ) ).thenReturn(
+				Optional.ofNullable( tournamentTwo ) );
+		when( tournamentTeamRepository.findTournamentTeamsByTournamentAndRound( tournamentTwo,
+				Round.FINAL ) ).thenReturn( tournamentTeamListTwo );
 
+		final List<TournamentTeam> tournamentTeamList = tournamentTeamController.getTournamentTeamsByRound(
+				2L, Round.FINAL );
+
+		assertThat( tournamentTeamList ).contains( tournamentTeamThree );
+		assertThat( tournamentTeamList ).contains( tournamentTeamFour );
 	}
 
 	@Test
-	public void addTournamentTeamToGroup_HappyPath(){
+	public void addTournamentTeamToGroup_HappyPath() {
+		when( tournamentTeamRepository.findById( 1L ) ).thenReturn(
+				Optional.ofNullable( tournamentTeamTwo ) );
+		tournamentTeamTwo.setTournamentGroup( "A" );
 
+		tournamentTeamController.addTournamentTeamToGroup( 1L, "A" );
+
+		verify( tournamentTeamRepository, times( 1 ) ).save( tournamentTeamTwo );
 	}
 
 	@Test
-	public void getTournamentTeamsByGroup_HappyPath(){
+	public void getTournamentTeamsByGroup_HappyPath() {
+		when( tournamentRepository.findById( 2L ) ).thenReturn(
+				Optional.ofNullable( tournamentTwo ) );
+		when( tournamentTeamRepository.findTournamentTeamsByTournamentAndTournamentGroupOrderByGroupPointsDescGroupScoreDifferenceDescGroupScoreDifferenceDesc(
+				tournamentTwo, "A" ) ).thenReturn( tournamentTeamListTwo );
 
+		final List<TournamentTeam> tournamentTeamList = tournamentTeamController.getTournamentTeamsByGroup(
+				2L, "A" );
+
+		assertThat( tournamentTeamList ).contains( tournamentTeamThree );
+		assertThat( tournamentTeamList ).contains( tournamentTeamFour );
 	}
-
-
 
 }
