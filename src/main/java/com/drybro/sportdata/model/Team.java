@@ -2,7 +2,6 @@ package com.drybro.sportdata.model;
 
 import com.drybro.sportdata.model.constants.Sport;
 
-import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
