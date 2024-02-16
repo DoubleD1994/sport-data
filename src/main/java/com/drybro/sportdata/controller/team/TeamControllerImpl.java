@@ -63,12 +63,17 @@ public class TeamControllerImpl implements TeamController {
 	public void updateTeam( @PathVariable("teamId") final Long teamId,
 			@RequestBody final Team updatedTeam ) {
 		final Team team = findTeamById( teamId );
+
 		if ( !updatedTeam.getTeamName().isBlank() ) {
 			team.setTeamName( updatedTeam.getTeamName() );
+		}
+		if ( updatedTeam.getSport().describeConstable().isPresent() ) {
+			team.setSport( updatedTeam.getSport() );
 		}
 		if ( updatedTeam.getLogoPath() != null && !updatedTeam.getLogoPath().isBlank() ) {
 			team.setLogoPath( updatedTeam.getLogoPath() );
 		}
+
 		teamRepository.save( team );
 		log.info( "TEAM WITH ID {} UPDATED", teamId );
 	}

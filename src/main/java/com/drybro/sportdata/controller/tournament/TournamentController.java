@@ -36,7 +36,7 @@ public interface TournamentController {
 	Tournament getTournamentById( @PathVariable final Long tournamentId );
 
 	@GetMapping(TOURNAMENT_SPORT_PATH)
-	Tournament getTournamentBySport( @RequestParam final Sport sport );
+	List<Tournament> getTournamentsBySport( @RequestParam final Sport sport );
 
 	@PutMapping(TOURNAMENT_ID_PATH)
 	void updateTournament( @PathVariable final Long tournamentId,
