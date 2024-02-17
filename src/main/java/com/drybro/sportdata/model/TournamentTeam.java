@@ -10,6 +10,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -25,24 +26,24 @@ import lombok.RequiredArgsConstructor;
 @AllArgsConstructor
 public class TournamentTeam {
 
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Id
 	@Column(name = "id")
 	private Long id;
 
-	@OneToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name = "team_id", referencedColumnName = "id")
+	@ManyToOne
+	@JoinColumn(name = "team_id")
 	@NotNull
 	private Team team;
 
-	@OneToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name = "tournament_id", referencedColumnName = "id")
+	@ManyToOne
+	@JoinColumn(name = "tournament_id")
 	@NotNull
 	private Tournament tournament;
 
 	@NotNull
-	@Column(name = "round")
-	private Round round;
+	@Column(name = "teamRound")
+	private Round teamRound;
 
 	@Nullable
 	@Column(name = "tournament_group")
@@ -83,23 +84,4 @@ public class TournamentTeam {
 	@NotNull
 	@Column(name = "eliminated")
 	private Boolean eliminated;
-
-	public TournamentTeam( final Team team, final Tournament tournament, final Round round,
-			@Nullable final Integer groupGamesPlayed, @Nullable final Integer groupGamesWon,
-			@Nullable final Integer groupGamesDraw, @Nullable final Integer groupGamesLost, @Nullable final Integer groupScoreFor,
-			@Nullable final Integer groupScoreAgainst, @Nullable final Integer groupScoreDifference, @Nullable final Integer groupPoints, final Boolean eliminated ) {
-		this.team = team;
-		this.tournament = tournament;
-		this.round = round;
-		this.groupGamesPlayed = groupGamesPlayed;
-		this.groupGamesWon = groupGamesWon;
-		this.groupGamesDraw = groupGamesDraw;
-		this.groupGamesLost = groupGamesLost;
-		this.groupScoreFor = groupScoreFor;
-		this.groupScoreAgainst = groupScoreAgainst;
-		this.groupScoreDifference = groupScoreDifference;
-		this.groupPoints = groupPoints;
-		this.eliminated = eliminated;
-	}
-
 }

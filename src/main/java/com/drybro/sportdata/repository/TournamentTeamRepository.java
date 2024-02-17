@@ -18,7 +18,7 @@ public interface TournamentTeamRepository extends CrudRepository<TournamentTeam,
 
 	List<TournamentTeam> findTournamentTeamsByTournamentAndEliminated(Tournament tournament, Boolean eliminated);
 
-	List<TournamentTeam> findTournamentTeamsByTournamentAndRound(Tournament tournament, Round round);
+	List<TournamentTeam> findTournamentTeamsByTournamentAndTeamRound(Tournament tournament, Round round);
 
 	List<TournamentTeam> findTournamentTeamsByTournamentAndTournamentGroupOrderByGroupPointsDescGroupScoreDifferenceDescGroupScoreDifferenceDesc(Tournament tournament, String group);
 

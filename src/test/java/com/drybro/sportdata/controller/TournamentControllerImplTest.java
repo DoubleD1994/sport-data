@@ -43,11 +43,11 @@ public class TournamentControllerImplTest {
 	@BeforeAll
 	public static void beforeAll() {
 		tournamentOne = new Tournament( 1L, "Tournament One", 8, Format.LEAGUE, 1, 8, 1, 1,
-				Sport.FOOTBALL );
+				Sport.FOOTBALL, new ArrayList<>() );
 		tournamentTwo = new Tournament( 2L, "Tournament Two", 8, Format.KNOCKOUT, 0, 0, 3, 0,
-				Sport.FOOTBALL );
+				Sport.FOOTBALL, new ArrayList<>() );
 		tournamentThree = new Tournament( 3L, "Tournament Three", 8, Format.GROUPS_AND_KNOCKOUT, 8,
-				4, 4, 14, Sport.AMERICAN_FOOTBALL );
+				4, 4, 14, Sport.AMERICAN_FOOTBALL, new ArrayList<>() );
 
 		tournamentList.add( tournamentOne );
 		tournamentList.add( tournamentTwo );
@@ -151,8 +151,8 @@ public class TournamentControllerImplTest {
 
 	@Test
 	void deleteTournament_HappyPath() {
-		tournamentController.deleteTournament( tournamentOne.getId() );
-		verify( tournamentRepository, times( 1 ) ).deleteById( tournamentOne.getId() );
+		tournamentController.deleteTournament( tournamentOne.getTournamentId() );
+		verify( tournamentRepository, times( 1 ) ).deleteById( tournamentOne.getTournamentId() );
 	}
 
 }

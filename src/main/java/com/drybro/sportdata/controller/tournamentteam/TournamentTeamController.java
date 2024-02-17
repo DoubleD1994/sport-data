@@ -31,7 +31,7 @@ public interface TournamentTeamController {
 
 	@PostMapping()
 	void addTeamsToTournament( @PathVariable final Long tournamentId,
-			@RequestBody final List<Team> teams );
+			@RequestBody final List<Long> teamIds );
 
 	@GetMapping(TOURNAMENT_TEAM_STANDING)
 	List<TournamentTeam> getTournamentStandings(@PathVariable final Long tournamentId);
@@ -48,6 +48,6 @@ public interface TournamentTeamController {
 	void addTournamentTeamToGroup( @RequestParam final Long tournamentTeamId, @RequestParam final String groupName );
 
 	@GetMapping(TOURNAMENT_TEAM_BY_GROUP_PATH)
-	List<TournamentTeam> getTournamentTeamsByGroup( @PathVariable final Long tournamentTeamId,
+	List<TournamentTeam> getTournamentTeamsByGroup( @RequestParam final Long tournamentTeamId,
 			@RequestParam final String group );
 }

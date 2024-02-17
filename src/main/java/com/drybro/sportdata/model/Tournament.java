@@ -1,13 +1,17 @@
 package com.drybro.sportdata.model;
 
+import java.util.List;
+
 import com.drybro.sportdata.model.constants.Format;
 import com.drybro.sportdata.model.constants.Sport;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -23,8 +27,8 @@ public class Tournament {
 
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Id
-	@Column(name = "id")
-	private Long id;
+	@Column(name = "tournament_id")
+	private Long tournamentId;
 
 	@NotNull
 	@Column(name = "name", unique = true)
@@ -57,5 +61,9 @@ public class Tournament {
 	@NotNull
 	@Column(name = "sport")
 	private Sport sport;
+
+	@JsonIgnore
+	@OneToMany(mappedBy = "tournament")
+	private List<TournamentTeam> tournamentTeams;
 
 }

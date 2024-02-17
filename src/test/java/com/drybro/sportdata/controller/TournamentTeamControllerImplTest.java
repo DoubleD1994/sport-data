@@ -23,6 +23,7 @@ import com.drybro.sportdata.model.TournamentTeam;
 import com.drybro.sportdata.model.constants.Format;
 import com.drybro.sportdata.model.constants.Round;
 import com.drybro.sportdata.model.constants.Sport;
+import com.drybro.sportdata.repository.TeamRepository;
 import com.drybro.sportdata.repository.TournamentRepository;
 import com.drybro.sportdata.repository.TournamentTeamRepository;
 
@@ -35,13 +36,16 @@ public class TournamentTeamControllerImplTest {
 	@MockBean
 	private TournamentRepository tournamentRepository;
 
+	@MockBean
+	private TeamRepository teamRepository;
+
 	@Autowired
 	private TournamentTeamController tournamentTeamController;
 
 	private static Tournament tournamentOne;
 	private static Tournament tournamentTwo;
 
-	private final static List<Team> teamList = new ArrayList<>();
+	private final static List<Long> teamList = new ArrayList<>();
 	private final static List<TournamentTeam> tournamentTeamListOne = new ArrayList<>();
 	private final static List<TournamentTeam> tournamentTeamListTwo = new ArrayList<>();
 
@@ -57,29 +61,29 @@ public class TournamentTeamControllerImplTest {
 
 	@BeforeAll
 	public static void beforeAll() {
-		teamOne = new Team( 1L, "teamOne", Sport.FOOTBALL, "path" );
-		teamTwo = new Team( 2L, "teamTwo", Sport.FOOTBALL, null );
-		teamThree = new Team( 3L, "teamThree", Sport.FOOTBALL, null );
-		teamFour = new Team( 4L, "teamFour", Sport.FOOTBALL, null );
+		teamOne = new Team( 1L, "teamOne", Sport.FOOTBALL, "path", new ArrayList<>() );
+		teamTwo = new Team( 2L, "teamTwo", Sport.FOOTBALL, null, new ArrayList<>() );
+		teamThree = new Team( 3L, "teamThree", Sport.FOOTBALL, null, new ArrayList<>() );
+		teamFour = new Team( 4L, "teamFour", Sport.FOOTBALL, null, new ArrayList<>() );
 
-		teamList.add( teamOne );
-		teamList.add( teamTwo );
-		teamList.add( teamThree );
-		teamList.add( teamFour );
+		teamList.add( teamOne.getTeamId() );
+		teamList.add( teamTwo.getTeamId() );
+		teamList.add( teamThree.getTeamId() );
+		teamList.add( teamFour.getTeamId() );
 
 		tournamentOne = new Tournament( 1L, "Tournament One", 2, Format.LEAGUE, 1, 2, 0, 1,
-				Sport.FOOTBALL );
+				Sport.FOOTBALL, new ArrayList<>() );
 
 		tournamentTwo = new Tournament( 2L, "Tournament Two", 2, Format.KNOCKOUT, 0, 0, 1, 0,
-				Sport.FOOTBALL );
+				Sport.FOOTBALL, new ArrayList<>() );
 
-		tournamentTeamOne = new TournamentTeam( teamOne, tournamentOne, Round.GROUP, 0, 0, 0, 0, 0,
+		tournamentTeamOne = new TournamentTeam( null, teamOne, tournamentOne, Round.GROUP, null, 0, 0, 0, 0, 0,
 				0, 0, 0, false );
-		tournamentTeamTwo = new TournamentTeam( teamTwo, tournamentOne, Round.GROUP, 0, 0, 0, 0, 0,
+		tournamentTeamTwo = new TournamentTeam( null, teamTwo, tournamentOne, Round.GROUP, null, 0, 0, 0, 0, 0,
 				0, 0, 0, false );
-		tournamentTeamThree = new TournamentTeam( teamThree, tournamentTwo, Round.FINAL, 0, 0, 0, 0,
+		tournamentTeamThree = new TournamentTeam( null, teamThree, tournamentTwo, Round.FINAL, null, 0, 0, 0, 0,
 				0, 0, 0, 0, false );
-		tournamentTeamFour = new TournamentTeam( teamFour, tournamentTwo, Round.FINAL, 0, 0, 0, 0,
+		tournamentTeamFour = new TournamentTeam( null, teamFour, tournamentTwo, Round.FINAL, null, 0, 0, 0, 0,
 				0, 0, 0, 0, false );
 
 		tournamentTeamListOne.add( tournamentTeamOne );
@@ -104,6 +108,10 @@ public class TournamentTeamControllerImplTest {
 	public void addTeamsToTournament_HappyPathGroups() {
 		when( tournamentRepository.findById( 1L ) ).thenReturn(
 				Optional.ofNullable( tournamentOne ) );
+		when( teamRepository.findById( 1L ) ).thenReturn( Optional.ofNullable( teamOne ) );
+		when( teamRepository.findById( 2L ) ).thenReturn( Optional.ofNullable( teamTwo ) );
+		when( teamRepository.findById( 3L ) ).thenReturn( Optional.ofNullable( teamThree ) );
+		when( teamRepository.findById( 4L ) ).thenReturn( Optional.ofNullable( teamFour ) );
 
 		tournamentTeamController.addTeamsToTournament( 1L, teamList );
 
@@ -116,6 +124,10 @@ public class TournamentTeamControllerImplTest {
 	public void addTeamsToTournament_HappyPathKnockout() {
 		when( tournamentRepository.findById( 2L ) ).thenReturn(
 				Optional.ofNullable( tournamentTwo ) );
+		when( teamRepository.findById( 1L ) ).thenReturn( Optional.ofNullable( teamOne ) );
+		when( teamRepository.findById( 2L ) ).thenReturn( Optional.ofNullable( teamTwo ) );
+		when( teamRepository.findById( 3L ) ).thenReturn( Optional.ofNullable( teamThree ) );
+		when( teamRepository.findById( 4L ) ).thenReturn( Optional.ofNullable( teamFour ) );
 
 		tournamentTeamController.addTeamsToTournament( 2L, teamList );
 
@@ -157,7 +169,7 @@ public class TournamentTeamControllerImplTest {
 	public void getTournamentTeamsByRound_HappyPath() {
 		when( tournamentRepository.findById( 2L ) ).thenReturn(
 				Optional.ofNullable( tournamentTwo ) );
-		when( tournamentTeamRepository.findTournamentTeamsByTournamentAndRound( tournamentTwo,
+		when( tournamentTeamRepository.findTournamentTeamsByTournamentAndTeamRound( tournamentTwo,
 				Round.FINAL ) ).thenReturn( tournamentTeamListTwo );
 
 		final List<TournamentTeam> tournamentTeamList = tournamentTeamController.getTournamentTeamsByRound(

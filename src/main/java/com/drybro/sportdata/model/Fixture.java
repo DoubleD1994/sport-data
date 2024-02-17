@@ -26,8 +26,8 @@ public class Fixture {
 
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Id
-	@Column(name = "id")
-	private Long id;
+	@Column(name = "fixture_id")
+	private Long fixtureId;
 
 	@ManyToOne
 	@NotNull

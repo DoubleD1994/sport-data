@@ -43,9 +43,9 @@ public class TeamControllerImplTest {
 
 	@BeforeAll
 	public static void beforeAll() {
-		teamOne = new Team( 1L, "teamOne", Sport.FOOTBALL, "path" );
-		teamTwo = new Team( 2L, "teamTwo", Sport.FOOTBALL, null );
-		teamThree = new Team( 3L, "teamThree", Sport.AMERICAN_FOOTBALL, null );
+		teamOne = new Team( 1L, "teamOne", Sport.FOOTBALL, "path", new ArrayList<>() );
+		teamTwo = new Team( 2L, "teamTwo", Sport.FOOTBALL, null, new ArrayList<>() );
+		teamThree = new Team( 3L, "teamThree", Sport.AMERICAN_FOOTBALL, null, new ArrayList<>() );
 
 		teamList.add( teamOne );
 		teamList.add( teamTwo );
@@ -89,10 +89,10 @@ public class TeamControllerImplTest {
 
 	@Test
 	public void createTeam_NullTeamNameThrowsException() {
-		when( teamRepository.save( new Team( 4L, null, null, null ) ) ).thenThrow(
+		when( teamRepository.save( new Team( 4L, null, null, null, new ArrayList<>() ) ) ).thenThrow(
 				ConstraintViolationException.class );
 		assertThrows( ConstraintViolationException.class,
-				() -> teamController.createTeam( new Team( 4L, null, null, null ) ) );
+				() -> teamController.createTeam( new Team( 4L, null, null, null, new ArrayList<>() ) ) );
 	}
 
 	@Test
@@ -133,8 +133,8 @@ public class TeamControllerImplTest {
 
 	@Test
 	void deleteTeam_HappyPath() {
-		teamController.deleteTeam( teamOne.getId() );
-		verify( teamRepository, times( 1 ) ).deleteById( teamOne.getId() );
+		teamController.deleteTeam( teamOne.getTeamId() );
+		verify( teamRepository, times( 1 ) ).deleteById( teamOne.getTeamId() );
 	}
 
 	@Test

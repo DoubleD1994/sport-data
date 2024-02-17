@@ -52,8 +52,8 @@ public class TournamentTeamControllerImpl implements TournamentTeamController {
 	@Override
 	@PostMapping()
 	public void addTeamsToTournament( @RequestParam final Long tournamentId,
-			@RequestBody final List<Team> teams ) {
-		tournamentTeamService.addTeamsToTournament( tournamentId, teams );
+			@RequestBody final List<Long> teamIds ) {
+		tournamentTeamService.addTeamsToTournament( tournamentId, teamIds );
 	}
 
 	@Override
@@ -77,7 +77,7 @@ public class TournamentTeamControllerImpl implements TournamentTeamController {
 	public List<TournamentTeam> getTournamentTeamsByRound( @PathVariable final Long tournamentId,
 			@RequestParam final Round round ) {
 		final Tournament tournament = tournamentService.findTournamentById( tournamentId );
-		return tournamentTeamRepository.findTournamentTeamsByTournamentAndRound( tournament, round );
+		return tournamentTeamRepository.findTournamentTeamsByTournamentAndTeamRound( tournament, round );
 	}
 
 	@Override
